@@ -1,0 +1,14 @@
+{
+	"extension": ["ts"],
+	"diff": true,
+	"timeout": 10000,
+	"spec": [
+		"test/**/*.e2e-spec.ts", 
+		"test/**/*.e2e-uspec.ts"
+	],
+	"check-leaks": true,
+	"fail-zero": true,
+	"exit": true,
+	"loader": "ts-node/esm",
+	"recursive": true
+}

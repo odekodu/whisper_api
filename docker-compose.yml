@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  whispers_api:
+    image: whispers_api
+    container_name: whispers_api
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: development
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: sh /app/start.sh
+    depends_on:
+      - whispers_db
+      - whispers_cache
+    ports:
+      - ${PORT}:${PORT}
+    env_file:
+      - ${ENV_FILE:-.noenv}
+    
+  whispers_db:
+    image: mongo
+    container_name: whispers_db
+    ports:
+      - ${MONGO_PORT}:${MONGO_PORT}
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+
+  whispers_cache:
+    image: redis:5-alpine
+    container_name: whispers_cache
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}

@@ -1,6 +1,7 @@
-import { PartialType } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { CreateUserDto } from './create-user.dto';
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
-  wallet: string;
+  @ApiProperty({ description: 'Verification status of user' })
+  verified: string;
 }

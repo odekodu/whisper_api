@@ -39,8 +39,8 @@ export class TasksController {
   @ApiQuery({ name: 'search', required: false, description: 'The string to search for', type: String })
   @ApiQuery({ name: 'owner', required: false, description: 'The owner tasks to list', type: String })
   @ApiResponse({ status: HttpStatus.OK, type: ListTasksResponse })
-  @CacheKey(RedisCacheKeys.LIST_TASKS)
   @UseGuards(AuthorizeGuard)
+  @CacheKey(RedisCacheKeys.LIST_TASKS)
   @Get()
   listTasks(
     @Query('limit', new JoiValidationPipe(Joi.number().min(1))) limit?: number,
@@ -55,6 +55,7 @@ export class TasksController {
   @ApiParam({ name: 'id', required: true, description: 'The id of the user' })
   @ApiResponse({ status: HttpStatus.OK, type: TaskResponse })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, type: ErrorResponse })
+  @UseGuards(AuthorizeGuard)
   @CacheKey(RedisCacheKeys.GET_USER)
   @Get(':id')
   getUser(

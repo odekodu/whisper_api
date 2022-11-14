@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
@@ -60,6 +60,10 @@ export class TasksService {
 
   async getTask(id: string) {        
     const user = await this.taskModel.findById(id); 
+    if (!user) {
+      throw new NotFoundException('Task not found');
+    }
+    
     return { success: true, payload: user } as TaskResponse;
   }
 

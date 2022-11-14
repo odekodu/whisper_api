@@ -11,7 +11,7 @@ import { expect } from 'chai';
 import { createTaskStub, taskStub } from '../../stubs/task.stubs';
 import { JobsService } from '../../../src/jobs/jobs.service';
 
-describe.only('Create Task', () => {
+describe('Create Task', () => {
   let app: INestApplication;
   let httpServer: any;
   let moduleFixture: TestingModule;

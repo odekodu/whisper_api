@@ -25,6 +25,6 @@ export class CreateTaskDto {
     @ApiProperty({ description: 'Request body of task' })
     body?: any;
 
-    @ApiProperty({ description: 'URL authentication' })
+    @ApiProperty({ description: 'URL authentication', required: false })
     auth?: Auth;
 }

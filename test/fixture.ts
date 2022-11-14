@@ -6,12 +6,12 @@ import { RedisCacheService } from '../src/redis-cache/redis-cache.service';
 import { User } from '../src/domains/users/entities/user.entity';
 import { ConfigService } from '@nestjs/config';
 import { sign } from 'jsonwebtoken';
+import { Task } from '../src/domains/tasks/entities/task.entity';
+import { createTaskStub } from './stubs/task.stubs';
 
 export class Fixture {
   readonly userCollection: Collection;
-  readonly propertyCollection: Collection;
-  readonly rentCollection: Collection;
-  readonly transactionCollection: Collection;
+  readonly taskCollection: Collection;
 
   readonly password = '12345';
 
@@ -21,9 +21,7 @@ export class Fixture {
     private configService: ConfigService
   ){
     this.userCollection = this.connection.collection('users');
-    this.propertyCollection = this.connection.collection('properties');
-    this.rentCollection = this.connection.collection('rents');
-    this.transactionCollection = this.connection.collection('transactions');
+    this.taskCollection = this.connection.collection('tasks');
   }
 
   async createUser(data: Partial<User> = {}){
@@ -48,5 +46,16 @@ export class Fixture {
     await this.requestPassword(user.email);
     const token = sign(user._id, this.configService.get('SECRET'));
     return token;
+  }
+
+  async createTask(user: User, data: Partial<Task> = {}){
+    const id = uuidv4();
+    const createdAt = new Date();
+    const updatedAt = new Date();
+
+    await this.taskCollection.insertOne({ ...createTaskStub, ...data, _id: id as any, createdAt, updatedAt, owner: user._id });
+    const task = await this.taskCollection.findOne({ _id: id });
+
+    return task;
   }
 }

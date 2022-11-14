@@ -36,17 +36,20 @@ export class TasksController {
   @ApiQuery({ name: 'limit', required: false, description: 'The max number of users to fetch', type: Number })
   @ApiQuery({ name: 'offset', required: false, description: 'The page number to fetch', type: Number })
   @ApiQuery({ name: 'sort', required: false, description: 'The order of sorting', enum: SortEnum, type: String })
-  @ApiQuery({ name: 'query', required: false, description: 'The query for searching users', type: String })
+  @ApiQuery({ name: 'search', required: false, description: 'The string to search for', type: String })
+  @ApiQuery({ name: 'owner', required: false, description: 'The owner tasks to list', type: String })
   @ApiResponse({ status: HttpStatus.OK, type: ListTasksResponse })
   @CacheKey(RedisCacheKeys.LIST_TASKS)
+  @UseGuards(AuthorizeGuard)
   @Get()
-  listUsers(
+  listTasks(
     @Query('limit', new JoiValidationPipe(Joi.number().min(1))) limit?: number,
     @Query('offset', new JoiValidationPipe(Joi.number().min(0))) offset?: number,
     @Query('sort', new JoiValidationPipe(Joi.string().valid(...Object.values(SortEnum)))) sort?: SortEnum,
-    @Query('query', new JoiValidationPipe(Joi.string().default(''))) query?: string
+    @Query('search', new JoiValidationPipe(Joi.string().default(''))) search?: string,
+    @Query('owner', new JoiValidationPipe(Joi.string().default(''))) owner?: string
   ) {
-    return this.tasksService.listTasks(limit, offset, sort, query);
+    return this.tasksService.listTasks(limit, offset, sort, search, owner);
   }
 
   @ApiParam({ name: 'id', required: true, description: 'The id of the user' })

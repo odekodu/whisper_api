@@ -28,7 +28,7 @@ export class TasksService {
     const model = await this.taskModel.create({ ...createTaskDto, owner });
     const response = await this.getTask(model._id as string);
 
-    // await this.startTask(response.payload);
+    await this.startTask(response.payload);
     return response;
   }
 
@@ -36,21 +36,26 @@ export class TasksService {
     limit = this.configService.get<number>('PAGE_LIMIT'),
     offset = 0,
     sort = SortEnum.desc,
-    query = ''
+    search = '',
+    owner?: string
   ) {
-    const users = await this.taskModel.find({
-      hidden: false,
+    const query: any = {
       $or: [
-        { email: new RegExp(query, 'i') },
-        { firstname: new RegExp(query, 'i') },
-        { lastname: new RegExp(query, 'i') }
+        { title: new RegExp(search, 'i') },
+        { description: new RegExp(search, 'i') }
       ]
-    })
+    };
+
+    if (owner) {
+      query.owner = owner
+    }
+
+    const tasks = await this.taskModel.find(query)
       .sort({ 'createdAt': sort })
       .limit(limit)
       .skip(offset * limit);
       
-    return { success: true, payload: users.map(user => Task.toResponse(user)) } as ListTasksResponse;
+    return { success: true, payload: tasks.map(task => Task.toResponse(task)) } as ListTasksResponse;
   }
 
   async getTask(id: string) {        
@@ -86,7 +91,7 @@ export class TasksService {
     this.jobsService.createJob(
       task._id, 
       task.when, 
-      () => {
+      () => {        
         this.httpService[task.method](task.uri).subscribe(response => {
           console.log(response);
         });

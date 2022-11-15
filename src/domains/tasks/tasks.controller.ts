@@ -15,6 +15,7 @@ import { IdValidator } from '../../shared/id.validator';
 import { UpdateTaskValidator } from './validators/update-task.validator';
 import { AuthorizeGuard } from '../../guards/authorize.guard';
 import { CurrentUser } from '../../decorators/currentUser.decorator';
+import { CacheClear } from '../../decorators/cache-clear.decorator';
 
 @Controller('tasks')
 export class TasksController {
@@ -25,6 +26,7 @@ export class TasksController {
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, type: ErrorResponse })
   @ApiResponse({ status: HttpStatus.CONFLICT, type: ErrorResponse })
   @UseGuards(AuthorizeGuard)
+  @CacheClear(RedisCacheKeys.LIST_TASKS, RedisCacheKeys.GET_TASK)
   @Post()
   createTask(
     @Body(new JoiValidationPipe(CreateTaskValidator)) createTaskDto: CreateTaskDto,
@@ -56,7 +58,7 @@ export class TasksController {
   @ApiResponse({ status: HttpStatus.OK, type: TaskResponse })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, type: ErrorResponse })
   @UseGuards(AuthorizeGuard)
-  @CacheKey(RedisCacheKeys.GET_USER)
+  @CacheKey(RedisCacheKeys.GET_TASK)
   @Get(':id')
   getUser(
     @Param('id', new JoiValidationPipe(IdValidator())) id: string
@@ -67,11 +69,12 @@ export class TasksController {
   @ApiParam({ name: 'id', required: true, description: 'The id of the user' })
   @ApiResponse({ status: HttpStatus.OK, type: TaskResponse })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, type: ErrorResponse })
-  @UsePipes(new JoiValidationPipe(UpdateTaskValidator))
+  @UseGuards(AuthorizeGuard)
+  @CacheClear(RedisCacheKeys.LIST_TASKS, RedisCacheKeys.GET_TASK)
   @Patch(':id')
   updateTask(
     @Param('id', new JoiValidationPipe(IdValidator())) id: string,
-    @Body() updateTaskDto: UpdateTaskDto
+    @Body(new JoiValidationPipe(UpdateTaskValidator)) updateTaskDto: UpdateTaskDto
   ) {
     return this.tasksService.updateTask(id, updateTaskDto);
   }
@@ -79,6 +82,8 @@ export class TasksController {
   @ApiParam({ name: 'id', required: true, description: 'The id of the user' })
   @ApiResponse({ status: HttpStatus.OK, type: TaskResponse })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, type: ErrorResponse })
+  @UseGuards(AuthorizeGuard)
+  @CacheClear(RedisCacheKeys.LIST_TASKS, RedisCacheKeys.GET_TASK)
   @Delete(':id')
   removeTask(
     @Param('id', new JoiValidationPipe(IdValidator())) id: string,

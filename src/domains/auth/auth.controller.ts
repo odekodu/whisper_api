@@ -7,9 +7,9 @@ import { AuthSchema } from './entities/auth.schema';
 import { AuthValidator } from './validators/auth.validator';
 import { LoginResponse } from './responses/login.response';
 import { ResponseSchema } from '../../shared/response.schema';
-import { NoCache } from '../../decorators/no-cache.decorator';
 import * as Joi from 'joi';
 import { LimitRequestsGuard } from '../../guards/limit-requests.guard';
+import { CacheFilter } from '../../decorators/cache-filter.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -17,7 +17,7 @@ export class AuthController {
 
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, type: ErrorResponse })
   @ApiResponse({ status: HttpStatus.OK, type: PickType(ResponseSchema, ['success', 'timestamp', 'message']) })
-  @NoCache()
+  @CacheFilter()
   @UseGuards(LimitRequestsGuard)
   @Get(':email')
   request(

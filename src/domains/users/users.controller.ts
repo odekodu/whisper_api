@@ -11,6 +11,7 @@ import { SortEnum } from '../../shared/sort.enum';
 import { RedisCacheKeys } from '../../redis-cache/redis-cache.keys';
 import { ListUsersResponse } from './responses/list-users.response';
 import { UserResponse } from './responses/user.response';
+import { CacheClear } from '../../decorators/cache-clear.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -20,6 +21,7 @@ export class UsersController {
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, type: ErrorResponse })
   @ApiResponse({ status: HttpStatus.CONFLICT, type: ErrorResponse })
   @UsePipes(new JoiValidationPipe(CreateUserValidator))
+  @CacheClear(RedisCacheKeys.LIST_USERS, RedisCacheKeys.GET_USER)
   @Post()
   createUser(
     @Body() createUserDto: CreateUserDto

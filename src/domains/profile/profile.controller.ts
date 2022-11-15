@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpStatus, Patch, Put, UploadedFile, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
+import { Body, CacheKey, Controller, Delete, Get, HttpStatus, Patch, Put, UploadedFile, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { ApiHeader, ApiResponse, PickType } from '@nestjs/swagger';
 import { JoiValidationPipe } from '../../pipes/joi-validation.pipe';
 import { CurrentUser } from '../../decorators/currentUser.decorator';
@@ -9,10 +9,12 @@ import { UpdateUserDto } from '../users/dto/update-user.dto';
 import { UsersService } from '../users/users.service';
 import { UpdateProfileValidator } from './validators/update-profile.validator';
 import { ResponseSchema } from '../../shared/response.schema';
-import { NoCache } from '../../decorators/no-cache.decorator';
 import { UserResponse } from '../users/responses/user.response';
 import { Storage } from '../../shared/storage';
 import { FileValidator } from '../../shared/file.validator';
+import { CacheClear } from '../../decorators/cache-clear.decorator';
+import { RedisCacheKeys } from '../../redis-cache/redis-cache.keys';
+import { CacheFilter } from '../../decorators/cache-filter.decorator';
 
 @Controller('profile')
 export class ProfileController {
@@ -25,7 +27,8 @@ export class ProfileController {
   @ApiResponse({ status: HttpStatus.NOT_FOUND, type: ErrorResponse })
   @ApiResponse({ status: HttpStatus.UNAUTHORIZED, type: ErrorResponse })
   @UseGuards(AuthorizeGuard)
-  @NoCache()
+  @CacheKey(RedisCacheKeys.GET_USER)
+  @CacheFilter('token')
   @Get()
   getProfile(
     @CurrentUser('_id') id: string
@@ -40,6 +43,7 @@ export class ProfileController {
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, type: ErrorResponse })
   @ApiResponse({ status: HttpStatus.UNAUTHORIZED, type: ErrorResponse })
   @UseGuards(AuthorizeGuard, AuthenticationGuard)
+  @CacheClear(RedisCacheKeys.LIST_USERS, RedisCacheKeys.GET_USER)
   @Patch()
   updateProfile(
     @Body(new JoiValidationPipe(UpdateProfileValidator)) updateUserDto: UpdateUserDto,
@@ -54,6 +58,7 @@ export class ProfileController {
   @ApiResponse({ status: HttpStatus.NOT_FOUND, type: ErrorResponse })
   @ApiResponse({ status: HttpStatus.UNAUTHORIZED, type: ErrorResponse })
   @UseGuards(AuthorizeGuard, AuthenticationGuard)
+  @CacheClear(RedisCacheKeys.LIST_USERS, RedisCacheKeys.GET_USER)
   @Delete()
   removeProfie(
     @CurrentUser('_id') id: string,

@@ -67,7 +67,7 @@ export class UsersService {
         url: 'https://occupyapi.herokuapp.com/verify',
         name: user.payload.firstname
       }
-    });
+    });    
 
     return user;
   }

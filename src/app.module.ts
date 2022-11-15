@@ -13,6 +13,7 @@ import { MongoErrorFilter } from './errors/mongo-error.filter';
 import { MailModule } from './mail/mail.module';
 import { DomainsModule } from './domains/domains.module';
 import { JobsModule } from './jobs/jobs.module';
+import { RedisCacheClearInterceptor } from './redis-cache/redis-cache-clear.interceptor';
 
 @Module({
   imports: [
@@ -39,6 +40,10 @@ import { JobsModule } from './jobs/jobs.module';
     {
       provide: APP_FILTER,
       useClass: MongoErrorFilter
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: RedisCacheClearInterceptor
     },
     {
       provide: APP_INTERCEPTOR,

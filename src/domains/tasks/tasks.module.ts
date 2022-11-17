@@ -5,19 +5,24 @@ import { TasksController } from './tasks.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Task, TaskSchema } from './entities/task.entity';
 import { JobsService } from '../../jobs/jobs.service';
-import { Http2ServerRequest } from 'http2';
+import { ResponsesService } from '../responses/responses.service';
+import { Response, ResponseSchema } from '../responses/entities/response.entity';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Task.name, schema: TaskSchema }
     ]),
+    MongooseModule.forFeature([
+      { name: Response.name, schema: ResponseSchema }
+    ]),
     HttpModule
   ],
   controllers: [TasksController],
   providers: [
     TasksService,
-    JobsService
+    JobsService,
+    ResponsesService
   ]
 })
 export class TasksModule {}

@@ -16,6 +16,7 @@ import { UpdateTaskValidator } from './validators/update-task.validator';
 import { AuthorizeGuard } from '../../guards/authorize.guard';
 import { CurrentUser } from '../../decorators/currentUser.decorator';
 import { CacheClear } from '../../decorators/cache-clear.decorator';
+import { ResponseSchema } from '../../shared/response.schema';
 
 @Controller('tasks')
 export class TasksController {
@@ -41,6 +42,7 @@ export class TasksController {
   @ApiQuery({ name: 'search', required: false, description: 'The string to search for', type: String })
   @ApiQuery({ name: 'owner', required: false, description: 'The owner tasks to list', type: String })
   @ApiResponse({ status: HttpStatus.OK, type: ListTasksResponse })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, type: ErrorResponse })
   @UseGuards(AuthorizeGuard)
   @CacheKey(RedisCacheKeys.LIST_TASKS)
   @Get()
@@ -57,6 +59,7 @@ export class TasksController {
   @ApiParam({ name: 'id', required: true, description: 'The id of the user' })
   @ApiResponse({ status: HttpStatus.OK, type: TaskResponse })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, type: ErrorResponse })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, type: ErrorResponse })
   @UseGuards(AuthorizeGuard)
   @CacheKey(RedisCacheKeys.GET_TASK)
   @Get(':id')
@@ -69,6 +72,7 @@ export class TasksController {
   @ApiParam({ name: 'id', required: true, description: 'The id of the user' })
   @ApiResponse({ status: HttpStatus.OK, type: TaskResponse })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, type: ErrorResponse })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, type: ErrorResponse })
   @UseGuards(AuthorizeGuard)
   @CacheClear(RedisCacheKeys.LIST_TASKS, RedisCacheKeys.GET_TASK)
   @Patch(':id')
@@ -79,9 +83,23 @@ export class TasksController {
     return this.tasksService.updateTask(id, updateTaskDto);
   }
 
+  @ApiQuery({ name: 'task', required: false, description: 'The task that created the response', type: String })
+  @ApiResponse({ status: HttpStatus.OK, type: ResponseSchema })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, type: ErrorResponse })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, type: ErrorResponse })
+  @UseGuards(AuthorizeGuard)
+  @CacheClear(RedisCacheKeys.GET_RESPONSE, RedisCacheKeys.LIST_RESPONSES)
+  @Delete(':id/responses')
+  clearTaskResponses(
+    @Param('id', new JoiValidationPipe(IdValidator())) id: string,
+  ) {
+    return this.tasksService.clearTaskResponses(id);
+  }
+
   @ApiParam({ name: 'id', required: true, description: 'The id of the user' })
   @ApiResponse({ status: HttpStatus.OK, type: TaskResponse })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, type: ErrorResponse })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, type: ErrorResponse })
   @UseGuards(AuthorizeGuard)
   @CacheClear(RedisCacheKeys.LIST_TASKS, RedisCacheKeys.GET_TASK)
   @Delete(':id')

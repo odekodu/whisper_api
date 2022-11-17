@@ -101,9 +101,6 @@ export class UsersService {
   async updateUser(id: string, updateUserDto: UpdateUserDto) {
     const user = await this.findById(id);
     await this.userModel.findOneAndUpdate({ _id: id }, updateUserDto);
-
-    await this.redisCacheService.del(`${RedisCacheKeys.GET_USER}`);
-    await this.redisCacheService.del(`${RedisCacheKeys.LIST_USERS}`, true);    
     
     return { success: true, payload: { ...user, ...updateUserDto }} as UserResponse;
   }
@@ -111,9 +108,6 @@ export class UsersService {
   async removeUser(id: string) {
     await this.findById(id);
     await this.userModel.findOneAndUpdate({ _id: id }, { hidden: true });
-
-    await this.redisCacheService.del(`${RedisCacheKeys.GET_USER}`);
-    await this.redisCacheService.del(`${RedisCacheKeys.LIST_USERS}`, true);
 
     return { success: true };
   }

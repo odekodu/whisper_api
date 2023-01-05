@@ -4,10 +4,9 @@ import { SwaggerDocumentOption } from "./swagger.document.options";
 
 export const setupOpenAPI = (app: INestApplication) => {
   const config = new DocumentBuilder()
-    .setTitle('occupy Documentation')
-    .setDescription('The occupy API documentation')
+    .setTitle('Whisper Documentation')
+    .setDescription('The Whisper API Documentation')
     .setVersion('1.0')
-    .addTag('occupy')
     .build();
 
   const options: SwaggerDocumentOption = {

@@ -32,5 +32,8 @@ services:
   whispers_cache:
     image: redis:5-alpine
     container_name: whispers_cache
+    command: /bin/sh -c "redis-server --requirepass $$REDIS_PASSWORD"
     ports:
       - ${REDIS_PORT}:${REDIS_PORT}
+    env_file:
+      - ${ENV_FILE:-.noenv}

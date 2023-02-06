@@ -18,7 +18,7 @@ services:
     ports:
       - ${PORT}:${PORT}
     env_file:
-      - ${ENV_FILE:-.noenv}
+      - .env
     
   whispers_db:
     image: mongo
@@ -36,4 +36,4 @@ services:
     ports:
       - ${REDIS_PORT}:${REDIS_PORT}
     env_file:
-      - ${ENV_FILE:-.noenv}
+      - .env

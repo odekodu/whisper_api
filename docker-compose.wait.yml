@@ -9,6 +9,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: password
+      
   whispers_cache_test:
     image: redis:5-alpine
     container_name: whispers_cache_test

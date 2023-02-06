@@ -56,7 +56,7 @@ describe('Remove Profile', () => {
   it('should delete the user', async () => {        
     const response = await request(httpServer)
       .delete('/profile')
-      .set('token', token)
+      .set('authorization', 'Bearer ' + token)
       .set('password', fixture.password);
 
     expect(response.status).to.equal(HttpStatus.OK);      

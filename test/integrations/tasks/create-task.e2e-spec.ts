@@ -64,7 +64,7 @@ describe('Create Task', () => {
     const { description } = createTaskStub;
     const response = await request(httpServer)
       .post('/tasks')
-      .set('token', token)
+      .set('authorization', 'Bearer ' + token)
       .send({ description });    
 
     expect(response.status).to.equal(HttpStatus.BAD_REQUEST);  
@@ -78,7 +78,7 @@ describe('Create Task', () => {
     const { title } = createTaskStub;
     const response = await request(httpServer)
       .post('/tasks')
-      .set('token', token)
+      .set('authorization', 'Bearer ' + token)
       .send({ title });    
 
     expect(response.status).to.equal(HttpStatus.BAD_REQUEST);  
@@ -92,7 +92,7 @@ describe('Create Task', () => {
     const { title } = createTaskStub;
     const response = await request(httpServer)
       .post('/tasks')
-      .set('token', token)
+      .set('authorization', 'Bearer ' + token)
       .send({ title, uri: 'uri' });    
 
     expect(response.status).to.equal(HttpStatus.BAD_REQUEST);  
@@ -106,7 +106,7 @@ describe('Create Task', () => {
     const { title, uri } = createTaskStub;
     const response = await request(httpServer)
       .post('/tasks')
-      .set('token', token)
+      .set('authorization', 'Bearer ' + token)
       .send({ title, uri });    
 
     expect(response.status).to.equal(HttpStatus.BAD_REQUEST);  
@@ -120,7 +120,7 @@ describe('Create Task', () => {
     const { title, uri } = createTaskStub;
     const response = await request(httpServer)
       .post('/tasks')
-      .set('token', token)
+      .set('authorization', 'Bearer ' + token)
       .send({ title, uri, method: 'method' });    
 
     expect(response.status).to.equal(HttpStatus.BAD_REQUEST);  
@@ -134,7 +134,7 @@ describe('Create Task', () => {
     const { title, uri, method } = createTaskStub;
     const response = await request(httpServer)
       .post('/tasks')
-      .set('token', token)
+      .set('authorization', 'Bearer ' + token)
       .send({ title, uri, method });    
 
     expect(response.status).to.equal(HttpStatus.BAD_REQUEST);  
@@ -148,7 +148,7 @@ describe('Create Task', () => {
     const { title, uri, method, when } = createTaskStub;
     const response = await request(httpServer)
       .post('/tasks')
-      .set('token', token)
+      .set('authorization', 'Bearer ' + token)
       .send({ title, uri, method, when });    
 
     expect(response.status).to.equal(HttpStatus.CREATED);  

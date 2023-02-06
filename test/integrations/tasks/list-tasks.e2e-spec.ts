@@ -62,7 +62,7 @@ describe('List Tasks', () => {
   it('should get 1 task', async () => {        
     const response = await request(httpServer)
       .get(`/tasks`)
-      .set('token', token);     
+      .set('authorization', 'Bearer ' + token);     
 
     expect(response.status).to.equal(HttpStatus.OK);      
     expect(response.body.success).to.equal(true);
@@ -73,7 +73,7 @@ describe('List Tasks', () => {
     await fixture.createTask(user, { title: 'Another' });      
     const response = await request(httpServer)
       .get(`/tasks`)
-      .set('token', token);         
+      .set('authorization', 'Bearer ' + token);         
 
     expect(response.status).to.equal(HttpStatus.OK);      
     expect(response.body.success).to.equal(true);
@@ -84,7 +84,7 @@ describe('List Tasks', () => {
     await fixture.createTask(user, { title: 'Another' });      
     const response = await request(httpServer)
       .get(`/tasks?sort=${SortEnum.asc}`)
-      .set('token', token);      
+      .set('authorization', 'Bearer ' + token);      
     
     expect(response.status).to.equal(HttpStatus.OK);      
     expect(response.body.success).to.equal(true);
@@ -96,7 +96,7 @@ describe('List Tasks', () => {
     await fixture.createTask(user, { title: 'Another' });      
     const response = await request(httpServer)
       .get(`/tasks?limit=1`)
-      .set('token', token);          
+      .set('authorization', 'Bearer ' + token);          
 
     expect(response.status).to.equal(HttpStatus.OK);      
     expect(response.body.success).to.equal(true);
@@ -107,7 +107,7 @@ describe('List Tasks', () => {
     await fixture.createTask(user, { title: 'Another' });      
     const response = await request(httpServer)
       .get(`/tasks?limit=1&offset=1`)
-      .set('token', token);   
+      .set('authorization', 'Bearer ' + token);   
 
     expect(response.status).to.equal(HttpStatus.OK);      
     expect(response.body.success).to.equal(true);
@@ -119,7 +119,7 @@ describe('List Tasks', () => {
     await fixture.createTask(user, { title: 'Another' });      
     const response = await request(httpServer)
       .get(`/tasks?search=Another`)
-      .set('token', token);
+      .set('authorization', 'Bearer ' + token);
 
     expect(response.status).to.equal(HttpStatus.OK);      
     expect(response.body.success).to.equal(true);

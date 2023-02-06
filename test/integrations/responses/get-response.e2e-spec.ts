@@ -65,7 +65,7 @@ describe('Get Response', () => {
   it('should fail when invalid id is sent', async () => {        
     const response = await request(httpServer)
       .get(`/responses/${1}`)
-      .set('token', token);
+      .set('authorization', 'Bearer ' + token);
 
     expect(response.status).to.equal(HttpStatus.BAD_REQUEST);      
     expect(response.body).to.deep.include({
@@ -78,7 +78,7 @@ describe('Get Response', () => {
     const id = task._id.toString().split('').reverse().join('');      
     const response = await request(httpServer)
       .get(`/responses/${id}`)
-      .set('token', token);        
+      .set('authorization', 'Bearer ' + token);        
     
     expect(response.status).to.equal(HttpStatus.NOT_FOUND);      
     expect(response.body).to.deep.include({
@@ -90,7 +90,7 @@ describe('Get Response', () => {
   it('should get the response', async () => {        
     const response = await request(httpServer)
       .get(`/responses/${taskResponse._id}`)
-      .set('token', token);     
+      .set('authorization', 'Bearer ' + token);     
 
     expect(response.status).to.equal(HttpStatus.OK);      
     expect(response.body.payload).to.deep.include(responseStub(task._id));

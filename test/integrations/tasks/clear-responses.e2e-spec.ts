@@ -64,7 +64,7 @@ describe('Clear Responses', () => {
   it('should fail when invalid id is sent', async () => {        
     const response = await request(httpServer)
       .delete(`/tasks/${1}/responses`)
-      .set('token', token);
+      .set('authorization', 'Bearer ' + token);
 
     expect(response.status).to.equal(HttpStatus.BAD_REQUEST);      
     expect(response.body).to.deep.include({
@@ -77,7 +77,7 @@ describe('Clear Responses', () => {
     const id = task._id.toString().split('').reverse().join('');      
     const response = await request(httpServer)
       .delete(`/tasks/${id}/responses`)
-      .set('token', token);        
+      .set('authorization', 'Bearer ' + token);        
     
     expect(response.status).to.equal(HttpStatus.NOT_FOUND);      
     expect(response.body).to.deep.include({
@@ -89,7 +89,7 @@ describe('Clear Responses', () => {
   it('should clear all task responses', async () => {        
     const response = await request(httpServer)
       .delete(`/tasks/${task._id}/responses`)
-      .set('token', token);     
+      .set('authorization', 'Bearer ' + token);     
 
     expect(response.status).to.equal(HttpStatus.OK);      
   });

@@ -58,7 +58,7 @@ describe('Update Task', () => {
   it('should fail when invalid id is sent', async () => {        
     const response = await request(httpServer)
       .patch(`/tasks/${1}`)
-      .set('token', token);
+      .set('authorization', 'Bearer ' + token);
 
     expect(response.status).to.equal(HttpStatus.BAD_REQUEST);      
     expect(response.body).to.deep.include({
@@ -71,7 +71,7 @@ describe('Update Task', () => {
     const id = task._id.toString().split('').reverse().join('');      
     const response = await request(httpServer)
       .patch(`/tasks/${id}`)
-      .set('token', token);        
+      .set('authorization', 'Bearer ' + token);        
     
     expect(response.status).to.equal(HttpStatus.NOT_FOUND);      
     expect(response.body).to.deep.include({
@@ -83,7 +83,7 @@ describe('Update Task', () => {
   it('should fail when invalid uri is provided', async () => {
     const response = await request(httpServer)
       .patch(`/tasks/${task._id}`)
-      .set('token', token)
+      .set('authorization', 'Bearer ' + token)
       .send({ uri: 'uri' });    
 
     expect(response.status).to.equal(HttpStatus.BAD_REQUEST);  
@@ -96,7 +96,7 @@ describe('Update Task', () => {
   it('should fail when invalid method is provided', async () => {
     const response = await request(httpServer)
       .patch(`/tasks/${task._id}`)
-      .set('token', token)
+      .set('authorization', 'Bearer ' + token)
       .send({ method: 'method' });    
 
     expect(response.status).to.equal(HttpStatus.BAD_REQUEST);  
@@ -109,7 +109,7 @@ describe('Update Task', () => {
   it('should create the task', async () => {
     const response = await request(httpServer)
       .patch(`/tasks/${task._id}`)
-      .set('token', token)
+      .set('authorization', 'Bearer ' + token)
       .send({ title: 'new title' });    
 
     expect(response.status).to.equal(HttpStatus.OK);  

@@ -58,7 +58,7 @@ describe('Get Profile', () => {
   it('should get the profile', async () => {        
     const response = await request(httpServer)
       .get('/profile')
-      .set('token', token);
+      .set('authorization', 'Bearer ' + token);
 
     expect(response.status).to.equal(HttpStatus.OK);      
     expect(response.body.payload).to.deep.include(userStub);

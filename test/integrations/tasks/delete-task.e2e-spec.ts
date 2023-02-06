@@ -58,7 +58,7 @@ describe('Delete Task', () => {
   it('should fail when invalid id is sent', async () => {        
     const response = await request(httpServer)
       .delete(`/tasks/${1}`)
-      .set('token', token);
+      .set('authorization', 'Bearer ' + token);
 
     expect(response.status).to.equal(HttpStatus.BAD_REQUEST);      
     expect(response.body).to.deep.include({
@@ -71,7 +71,7 @@ describe('Delete Task', () => {
     const id = task._id.toString().split('').reverse().join('');      
     const response = await request(httpServer)
       .delete(`/tasks/${id}`)
-      .set('token', token);        
+      .set('authorization', 'Bearer ' + token);        
     
     expect(response.status).to.equal(HttpStatus.NOT_FOUND);      
     expect(response.body).to.deep.include({
@@ -83,7 +83,7 @@ describe('Delete Task', () => {
   it('should delete the task', async () => {
     const response = await request(httpServer)
       .delete(`/tasks/${task._id}`)
-      .set('token', token);
+      .set('authorization', 'Bearer ' + token);
 
     expect(response.status).to.equal(HttpStatus.OK);  
   });

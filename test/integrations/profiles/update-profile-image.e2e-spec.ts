@@ -58,7 +58,7 @@ describe('Update Profile Image', () => {
   it('should fail when no image is sent', async () => {    
     const response = await request(httpServer)
       .patch('/profile/image')
-      .set('token', token);
+      .set('authorization', 'Bearer ' + token);
 
     expect(response.status).to.equal(HttpStatus.BAD_REQUEST);  
     expect(response.body).to.deep.include({
@@ -71,7 +71,7 @@ describe('Update Profile Image', () => {
     const response = await request(httpServer)
       .patch('/profile/image')
       .attach('image', './test/sample.png')
-      .set('token', token)
+      .set('authorization', 'Bearer ' + token)
       .set('Content-Type', 'multipart/form-data')
 
     expect(response.status).to.equal(HttpStatus.OK);          

@@ -71,7 +71,7 @@ describe('Update Profile', () => {
   it('should fail when invalid token is provided', async () => {
     const response = await request(httpServer)
       .patch('/profile')
-      .set('token', 'token')
+      .set('authorization', 'Bearer ' + 'token')
       .send();   
 
     expect(response.status).to.equal(HttpStatus.UNAUTHORIZED);  
@@ -84,7 +84,7 @@ describe('Update Profile', () => {
   it('should fail when no password is provided', async () => {
     const response = await request(httpServer)
       .patch('/profile')
-      .set('token', token)
+      .set('authorization', 'Bearer ' + token)
       .send(); 
     
       expect(response.status).to.equal(HttpStatus.UNAUTHORIZED);  
@@ -97,7 +97,7 @@ describe('Update Profile', () => {
   it('should fail when wrong password is provided', async () => {
     const response = await request(httpServer)
       .patch('/profile')
-      .set('token', token)
+      .set('authorization', 'Bearer ' + token)
       .set('password', '11223')
       .send(); 
     
@@ -111,7 +111,7 @@ describe('Update Profile', () => {
   it('should fail when invalid email is provided', async () => {
     const response = await request(httpServer)
       .patch('/profile')
-      .set('token', token)
+      .set('authorization', 'Bearer ' + token)
       .set('password', fixture.password)
       .send({ email: 'email' }); 
     
@@ -125,7 +125,7 @@ describe('Update Profile', () => {
   it('should fail when invalid phone is provided', async () => {
     const response = await request(httpServer)
       .patch('/profile')
-      .set('token', token)
+      .set('authorization', 'Bearer ' + token)
       .set('password', fixture.password)
       .send({ phone: 'phone' }); 
     
@@ -140,7 +140,7 @@ describe('Update Profile', () => {
     await fixture.createUser({ email: 'user@mail.com', phone: '11111111111' });
     const response = await request(httpServer)
       .patch('/profile')
-      .set('token', token)
+      .set('authorization', 'Bearer ' + token)
       .set('password', fixture.password)
       .send({ email: 'user@mail.com' });  
 
@@ -155,7 +155,7 @@ describe('Update Profile', () => {
     await fixture.createUser({ email: 'user@mail.com', phone: '11111111111' });
     const response = await request(httpServer)
       .patch('/profile')
-      .set('token', token)
+      .set('authorization', 'Bearer ' + token)
       .set('password', fixture.password)
       .send({ phone: '11111111111' });  
 
@@ -169,7 +169,7 @@ describe('Update Profile', () => {
   it('should succeed when valid data is sent', async () => {    
     const response = await request(httpServer)
       .patch('/profile')
-      .set('token', token)
+      .set('authorization', 'Bearer ' + token)
       .set('password', fixture.password)
       .send({ phone: '11111111111' });  
 

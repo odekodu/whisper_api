@@ -65,7 +65,7 @@ describe('List Responses', () => {
   it('should get 1 response', async () => {            
     const response = await request(httpServer)
       .get(`/responses?task=${task._id}`)
-      .set('token', token);     
+      .set('authorization', 'Bearer ' + token);     
 
     expect(response.status).to.equal(HttpStatus.OK);      
     expect(response.body.success).to.equal(true);
@@ -76,7 +76,7 @@ describe('List Responses', () => {
     await fixture.createResponse(user, task);      
     const response = await request(httpServer)
       .get(`/responses?task=${task._id}`)
-      .set('token', token);         
+      .set('authorization', 'Bearer ' + token);         
 
     expect(response.status).to.equal(HttpStatus.OK);      
     expect(response.body.success).to.equal(true);
@@ -87,7 +87,7 @@ describe('List Responses', () => {
     await fixture.createResponse(user, task);      
     const response = await request(httpServer)
       .get(`/responses?task=${task._id}&sort=${SortEnum.asc}`)
-      .set('token', token);      
+      .set('authorization', 'Bearer ' + token);      
     
     expect(response.status).to.equal(HttpStatus.OK);      
     expect(response.body.success).to.equal(true);
@@ -99,7 +99,7 @@ describe('List Responses', () => {
     await fixture.createResponse(user, task);      
     const response = await request(httpServer)
       .get(`/responses?task=${task._id}&limit=1`)
-      .set('token', token);          
+      .set('authorization', 'Bearer ' + token);          
 
     expect(response.status).to.equal(HttpStatus.OK);      
     expect(response.body.success).to.equal(true);
@@ -110,7 +110,7 @@ describe('List Responses', () => {
     await fixture.createResponse(user, task);      
     const response = await request(httpServer)
       .get(`/responses?task=${task._id}&limit=1&offset=1`)
-      .set('token', token);   
+      .set('authorization', 'Bearer ' + token);   
 
     expect(response.status).to.equal(HttpStatus.OK);      
     expect(response.body.success).to.equal(true);

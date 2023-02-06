@@ -16,9 +16,10 @@ export class AuthorizeGuard implements CanActivate {
   }
 
   async authorize(request: any) {
-    const { token } = request.headers;
-    if (!token) throw new HttpException('You are not authorized', HttpStatus.UNAUTHORIZED);
+    const { authorization } = request.headers;    
+    if (!authorization) throw new HttpException('You are not authorized', HttpStatus.UNAUTHORIZED);
     
+    const [_, token] = authorization.split(' ');    
     return this.authService.decode(token);                    
   }
 }

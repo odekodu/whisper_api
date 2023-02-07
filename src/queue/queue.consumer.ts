@@ -1,7 +1,7 @@
 import { MailerService } from "@nestjs-modules/mailer";
 import { Process, Processor } from "@nestjs/bull";
 import { Job } from "bull";
-import { MailSchema } from "src/mail/mail.schema";
+import { MailSchema } from "../mail/mail.schema";
 
 @Processor('service_queue')
 export class QueueConsumer {

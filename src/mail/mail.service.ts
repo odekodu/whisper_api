@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { QueueProducerService } from 'src/queue/queue.producer.service';
+import { QueueProducerService } from '../queue/queue.producer.service';
 import { testCheck } from '../shared/test.check';
 import { MailSchema } from './mail.schema';
 

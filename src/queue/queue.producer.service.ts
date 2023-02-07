@@ -1,7 +1,7 @@
 import { InjectQueue } from '@nestjs/bull';
 import { Injectable, OnModuleDestroy } from '@nestjs/common';
 import { Queue } from 'bull';
-import { MailSchema } from 'src/mail/mail.schema';
+import { MailSchema } from '../mail/mail.schema';
 
 @Injectable()
 export class QueueProducerService {

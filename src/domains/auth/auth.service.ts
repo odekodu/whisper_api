@@ -2,19 +2,19 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { decode, sign } from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
 import { MailEnum } from '../../mail/mail.enum';
-import { MailService } from '../../mail/mail.service';
 import { RedisCacheKeys } from '../../redis-cache/redis-cache.keys';
 import { RedisCacheService } from '../../redis-cache/redis-cache.service';
 import { UsersService } from '../users/users.service';
 import { AuthSchema } from './entities/auth.schema';
 import { LoginResponse } from './responses/login.response';
+import { QueueProducerService } from 'src/queue/queue.producer.service';
 
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly redisCacheService: RedisCacheService,
-    private readonly mailService: MailService,
+    private readonly queueProducerService: QueueProducerService,
     private configService: ConfigService,
     private userService: UsersService
   ){}
@@ -25,8 +25,8 @@ export class AuthService {
 
     const key = `${RedisCacheKeys.AUTH_PASS}:${user.email}`;
     await this.redisCacheService.set(key, password, 5 * 60);
-
-    await this.mailService.sendMail({
+    
+    await this.queueProducerService.sendMail({
       to: user.email,
       subject: 'OTP Request',
       template: MailEnum.OTP,

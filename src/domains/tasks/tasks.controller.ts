@@ -22,7 +22,7 @@ import { ResponseSchema } from '../../shared/response.schema';
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
-  @ApiHeader({ name: 'token', required: true }) 
+  @ApiHeader({ name: 'authorization', required: true }) 
   @ApiResponse({ status: HttpStatus.CREATED, type: TaskResponse})
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, type: ErrorResponse })
   @ApiResponse({ status: HttpStatus.CONFLICT, type: ErrorResponse })

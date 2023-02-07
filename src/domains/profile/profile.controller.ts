@@ -22,7 +22,7 @@ export class ProfileController {
     private readonly usersService: UsersService
   ) {}
 
-  @ApiHeader({ name: 'token', required: true }) 
+  @ApiHeader({ name: 'authorization', required: true }) 
   @ApiResponse({ status: HttpStatus.OK, type: UserResponse })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, type: ErrorResponse })
   @ApiResponse({ status: HttpStatus.UNAUTHORIZED, type: ErrorResponse })
@@ -36,7 +36,7 @@ export class ProfileController {
     return this.usersService.getUser(id);
   }
 
-  @ApiHeader({ name: 'token', required: true })
+  @ApiHeader({ name: 'authorization', required: true })
   @ApiHeader({ name: 'password', required: true })
   @ApiResponse({ status: HttpStatus.OK, type: UserResponse })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, type: ErrorResponse })
@@ -52,7 +52,7 @@ export class ProfileController {
     return this.usersService.updateUser(id, updateUserDto);
   }
 
-  @ApiHeader({ name: 'token', required: true })
+  @ApiHeader({ name: 'authorization', required: true })
   @ApiHeader({ name: 'password', required: true })
   @ApiResponse({ status: HttpStatus.OK, type: PickType(ResponseSchema, ['success']) })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, type: ErrorResponse })
@@ -66,7 +66,7 @@ export class ProfileController {
     return this.usersService.removeUser(id);
   }
 
-  @ApiHeader({ name: 'token', required: true })
+  @ApiHeader({ name: 'authorization', required: true })
   @ApiResponse({ status: HttpStatus.OK, type: PickType(ResponseSchema, ['success']) })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, type: ErrorResponse })
   @ApiResponse({ status: HttpStatus.UNAUTHORIZED, type: ErrorResponse })

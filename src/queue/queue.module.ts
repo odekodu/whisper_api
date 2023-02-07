@@ -1,7 +1,8 @@
 import { Global, Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bull';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { QueueService } from './queue.service';
+import { QueueProducerService } from './queue.producer.service';
+import { QueueConsumer } from './queue.consumer';
 
 @Global()
 @Module({
@@ -13,14 +14,15 @@ import { QueueService } from './queue.service';
         redis: {
           host: configService.get('REDIS_HOST'),
           port: configService.get('REDIS_PORT'),
+          password: configService.get('REDIS_PASSWORD'),
         }
       })
     }),
     BullModule.registerQueue({
-      name: 'service-queue'
+      name: 'service_queue'
     })
   ],
-  providers: [QueueService],
-  exports: [QueueService]
+  providers: [QueueProducerService, QueueConsumer],
+  exports: [QueueProducerService]
 })
 export class QueueModule {}

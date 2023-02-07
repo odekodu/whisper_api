@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -31,7 +31,6 @@ export class UsersService {
     if (user) {
       return user;
     }
-
     user = await this.userModel.findOne({ email, hidden: false }) as User;    
     if(!user){
       throw new NotFoundException('User not found');
@@ -45,9 +44,7 @@ export class UsersService {
     if (user) {
       return user;
     }
-
     user = await this.userModel.findOne({ _id: id, hidden: false });   
-     
     if(!user){
       throw new NotFoundException('User not found');
     }

@@ -1,19 +1,13 @@
 import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Cache } from 'cache-manager';
-import { QueueService } from './../queue/queue.service';
 
 @Injectable()
 export class RedisCacheService {
   constructor(
     @Inject(CACHE_MANAGER) private readonly cache: Cache,
-    private queueService: QueueService,
     private configService: ConfigService
   ){}
-
-  async onModuleDestroy() {    
-    this.queueService.serviceQueue.close();
-  }
 
   async get<T = any>(key: string){
     return await this.cache.get<T>(key);
